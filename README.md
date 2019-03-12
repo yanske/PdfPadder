@@ -1,7 +1,16 @@
 # PDF Padder
 
-Simple script to add padding to a PDF file
+Simple script to add padding / whitespace to a PDF file. Useful for creating margins that allows slides to be annotated.
 
 ### Running
 
 Run `python3 main.py -h` for usage. Requires packages in `requirements.txt`
+
+### TODO
+
+* modularize: https://realpython.com/python-application-layouts/#installable-single-package, https://gehrcke.de/2014/02/distributing-a-python-command-line-application/
+* option to save to destination / file name
+* option to accept regex for input
+* paralize for single input
+* tests / travis
+* create as binary
