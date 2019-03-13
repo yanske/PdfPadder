@@ -11,7 +11,7 @@ class ImageProcessor:
   @staticmethod
   def pad(image, options = {}):
     """Pad image with specified parameters
-    
+
     Optional parameters:
       ratio: ratio of whitespace to orginal image width, default = 40%
       color: color of padding, default = white
