@@ -23,6 +23,7 @@ class FileProcessor:
     """Saves images as a PDF file"""
     temp_image_dir = FileProcessor._save_images_as_temp(images)
     FileProcessor._convert_images_to_pdf(temp_image_dir, FileProcessor.OUT_DIR)
+    FileProcessor._cleanup_image_temps(temp_image_dir)
 
   @staticmethod
   def _save_images_as_temp(images):
@@ -47,5 +48,12 @@ class FileProcessor:
     with open(output_name,"wb") as f:
       image_names = [FileProcessor.TEMP_DIR + str(i) + ".jpeg" for i in range(len(images))]
       f.write(img2pdf.convert(image_names))
+
+    return
+
+  @staticmethod
+  def _cleanup_image_temps(images):
+    image_names = [FileProcessor.TEMP_DIR + str(i) + ".jpeg" for i in range(len(images))]
+    for f in image_names: os.remove(f)
 
     return

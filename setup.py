@@ -1,4 +1,3 @@
-import re
 from setuptools import setup
  
 """Setup script to distribute PDF Padder.
@@ -13,7 +12,7 @@ setup(
   entry_points = {
     "console_scripts": ['padder = padder.padder:main']
   },
-  version = 1.1,
+  version = 2.1,
   description = "Add whitespace to PDF files.",
   author = "Yan Ke",
 )

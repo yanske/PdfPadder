@@ -4,11 +4,5 @@ Simple script to add padding / whitespace to a PDF file. Useful for creating mar
 
 ### Running
 
-Run `python3 padder_runner.py -h` for usage. Requires packages in `requirements.txt`
-
-### TODO
-* create as binary: https://gehrcke.de/2014/02/distributing-a-python-command-line-application/
-* option to save to destination / file name
-* option to accept regex for input
-* paralize for single input
-* tests / travis
+Run `python3 padder_runner.py -h` for usage. Requires packages in `requirements.txt`. Can also follow instructions in `setup.py` to use
+it by `padder -h`.

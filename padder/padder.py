@@ -15,6 +15,6 @@ def main():
   images = FileProcessor.open_pdf_as_image(args.path)
 
   padding_options = { "ratio": args.ratio }
-  images = [ImageProcessor.pad(img, padding_options) for img in images]
+  padded_images = [ImageProcessor.pad(img, padding_options) for img in images]
   
-  FileProcessor.save_images_as_pdf(images)
+  FileProcessor.save_images_as_pdf(padded_images)
