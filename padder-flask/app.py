@@ -4,6 +4,7 @@ import sys
 from flask import Flask, flash, redirect, render_template, request, send_file
 from werkzeug.utils import secure_filename
 
+# Includes the parent directory, to allow importing the padder module.
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dir_path, os.pardir)))
 from padder import padder
