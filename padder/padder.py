@@ -1,20 +1,52 @@
-import argparse
+"""Main padding logic for PDF and temp file processing.
+"""
 
-from padder.imageprocessor import ImageProcessor
-from padder.fileprocessor import FileProcessor
+import os
+import pdf2image
+import img2pdf
+from PIL import Image
 
-def _parse_arguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument("path", help = "path to the target PDF")
-  parser.add_argument("-r", "--ratio", help = "ratio of the padding compared to the PDF width", type = float, default = 0.4)
-  return parser.parse_args()
+import random
+import string
 
-def main():
-  args = _parse_arguments()
+def _generate_tmp_path(tmp_dir='/tmp', ext=''):
+  letters = string.ascii_lowercase
+  path = ''.join(random.choice(letters) for _ in range(10)) + ext
+  return os.path.join(tmp_dir, path)
 
-  images = FileProcessor.open_pdf_as_image(args.path)
+def pad_pdf(path, ratio):
+  """Pad PDF with a <ratio>% white margin increase on the right.
 
-  padding_options = { "ratio": args.ratio }
-  padded_images = [ImageProcessor.pad(img, padding_options) for img in images]
+  Takes a path to the original PDF file, converts them to PIL images,
+  and pads them with the appropriate whitespace. Returns a path to the
+  padded PDF.
+  """
+
+  images = pdf2image.convert_from_path(path)
+
+  # Pad the individual images by overlaying it on a white background.
+  padded_images = []
+  for img in images:
+    w, h = img.size
+    padded_img = Image.new("RGB", (int(w * (1.0 + ratio)), h), "white")
+    padded_img.paste(img, (0, 0))
+
+    padded_images.append(padded_img) 
   
-  FileProcessor.save_images_as_pdf(padded_images)
+  # Save the images as files.
+  image_paths = []
+  for img in padded_images:
+    tmp_path = _generate_tmp_path(ext='.jpeg')
+    img.save(tmp_path, "JPEG")
+    image_paths.append(tmp_path)
+
+  # Output as PDF.
+  output = _generate_tmp_path(ext='.pdf')
+  with open(output, 'wb') as f:
+    f.write(img2pdf.convert(image_paths))
+  
+  # Clean up temp image files used.
+  for tmp_img in image_paths:
+    os.remove(tmp_img)
+
+  return output

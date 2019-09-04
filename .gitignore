@@ -1,25 +1,6 @@
-/output
-/tmp
-/input
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-
-# Distribution / packaging
-bin/
-build/
-develop-eggs/
-dist/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Testing
-.pytest_cache
+**/__pycache__/
+**/*.egg-info
+**/*.py[cod]
+**/build
+**/dist
+**/env
