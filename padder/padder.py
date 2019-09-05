@@ -8,6 +8,7 @@ from PIL import Image
 
 import random
 import string
+from pathos.multiprocessing import ProcessingPool as Pool
 
 def _generate_tmp_path(tmp_dir='/tmp', ext=''):
   letters = string.ascii_lowercase
@@ -24,29 +25,33 @@ def pad_pdf(path, ratio):
 
   images = pdf2image.convert_from_path(path)
 
-  # Pad the individual images by overlaying it on a white background.
-  padded_images = []
-  for img in images:
+  p = Pool(4)
+
+  def overlay_and_store(img):
+    """Pad the individual images by overlaying it on a white background.
+
+    Passed to a multiprocessing pool as each individual PDF page is
+    independent of each other. Saves the image in a temp path as a JPEG,
+    and returns the absolute file path.
+    """
+
     w, h = img.size
     padded_img = Image.new("RGB", (int(w * (1.0 + ratio)), h), "white")
     padded_img.paste(img, (0, 0))
 
-    padded_images.append(padded_img) 
-  
-  # Save the images as files.
-  image_paths = []
-  for img in padded_images:
     tmp_path = _generate_tmp_path(ext='.jpeg')
-    img.save(tmp_path, "JPEG")
-    image_paths.append(tmp_path)
+    padded_img.save(tmp_path, "JPEG")
+    return tmp_path
+
+  padded_images = p.map(overlay_and_store, images)
 
   # Output as PDF.
   output = _generate_tmp_path(ext='.pdf')
   with open(output, 'wb') as f:
-    f.write(img2pdf.convert(image_paths))
+    f.write(img2pdf.convert(padded_images))
   
   # Clean up temp image files used.
-  for tmp_img in image_paths:
+  for tmp_img in padded_images:
     os.remove(tmp_img)
 
   return output

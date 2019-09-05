@@ -24,16 +24,21 @@ def pad():
         return redirect('/')
     
     pdf = request.files['pdf']
-    # TODO: add validation on size and extension.
+    if not pdf.filename.endswith('.pdf'):
+        flash("Not a PDF file!")
+        return redirect('/')
 
     # Save the file into a temp location.
     filename = secure_filename(pdf.filename)
     path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     pdf.save(path)
 
-    output = padder.pad_pdf(path, 0.4)
-    # TODO: remove the PDF once it has been processed.
-    return send_file(output, as_attachment=True)
+    try:
+        output = padder.pad_pdf(path, 0.4)
+        return send_file(output, as_attachment=True)
+    except Exception as e:
+        flash("Error: " + str(e))
+        return redirect('/')
 
 if __name__ == '__main__':
     app.run()
