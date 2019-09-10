@@ -15,12 +15,15 @@ def _generate_tmp_path(tmp_dir='/tmp', ext=''):
   path = ''.join(random.choice(letters) for _ in range(10)) + ext
   return os.path.join(tmp_dir, path)
 
-def pad_pdf(path, ratio):
+def pad_pdf(path, ratio, output_path = None):
   """Pad PDF with a <ratio>% white margin increase on the right.
 
   Takes a path to the original PDF file, converts them to PIL images,
   and pads them with the appropriate whitespace. Returns a path to the
   padded PDF.
+
+  If a valid output_path is given, it will move the PDF to the given path
+  and return the path.
   """
 
   images = pdf2image.convert_from_path(path)
@@ -49,9 +52,13 @@ def pad_pdf(path, ratio):
   output = _generate_tmp_path(ext='.pdf')
   with open(output, 'wb') as f:
     f.write(img2pdf.convert(padded_images))
-  
+
   # Clean up temp image files used.
   for tmp_img in padded_images:
     os.remove(tmp_img)
+
+  if output_path:
+    os.rename(output, output_path)
+    return output_path
 
   return output
