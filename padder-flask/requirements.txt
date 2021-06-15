@@ -31,7 +31,7 @@ requests==2.18.4
 requests-unixsocket==0.1.5
 SecretStorage==2.3.1
 six==1.11.0
-thefuck==3.29
+thefuck==3.31
 ubuntu-drivers-common==0.0.0
 ufw==0.36
 urllib3==1.22
