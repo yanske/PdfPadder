@@ -26,7 +26,7 @@ pyte==0.8.0
 python-apt===1.6.4-elementary6-ubuntu5.0.1
 pyxdg==0.25
 PyYAML==3.12
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.18.4
 requests-unixsocket==0.1.5
 SecretStorage==2.3.1
